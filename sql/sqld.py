@@ -1,3 +1,5 @@
+# Importing data from a CSV file
+
 import sqlite3
 import csv
 
@@ -13,4 +15,4 @@ with sqlite3.connect("new.db") as connection:
     c.execute("CREATE TABLE employees(firstname, lastname)")
 
     # insert data into table
-    c.executemany('INSERT INTO employees(firstname, lastname) values (?, ?), employees)
+    c.executemany('INSERT INTO employees(firstname, lastname) values (?, ?)', employees)
