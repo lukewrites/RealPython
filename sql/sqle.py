@@ -18,6 +18,6 @@ try:
     conn.commit()
 
 except sqlite3.OperationalError:
-    raise NameError
+    print "ERROR: You have not provided the name of a valid table name."
 
 conn.close()
