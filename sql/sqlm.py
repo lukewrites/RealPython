@@ -13,7 +13,7 @@ with sqlite3.connect("new.db") as connection:
            'sum': 'SELECT sum(POPULATION) FROM population',
            'count': 'SELECT count(POPULATION) FROM population'}
 
-    for keys, values in sql.iteritems():
+    for keys, values in sql.iteritems(): # iterates over k:v pairs in dict.
         # run sql
         c.execute(values)
         # fetchone() retrieves one record from the query
