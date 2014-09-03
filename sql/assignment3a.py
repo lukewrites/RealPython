@@ -10,6 +10,7 @@ with sqlite3.connect("newnum.db") as connection:
     # add 100 random ints range(0,100) to the db
     for i in range(100):
         c.execute("INSERT INTO random_numbers VALUES(?)",
-                  (random.randint(0,100)))
+                  (random.randint(0,100),))
         # wtf doesn't this work? getting:
         # ValueError: parameters are of unsupported type for line 13.
+        # FIXED: missing trailing comma!
