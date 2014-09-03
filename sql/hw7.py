@@ -16,5 +16,5 @@ with sqlite3.connect("cars.db") as connect:
         print row[0], row[1], '\n', row[2]
         # print quantity
         c.execute("SELECT count(order_date) FROM orders WHERE make=?", (row[0]))
-        order_count = c.fetchone()[0]
-        print order_count
+        # order_count = c.fetchone()[0]
+        # print order_count
