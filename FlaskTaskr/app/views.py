@@ -18,7 +18,7 @@ def login_requred(test):
             flash('You need to log in first')
             return redirect(url_for('login'))
         return wrap
-
+asdf
 
 @app.route('/logout/')
 def logout():
