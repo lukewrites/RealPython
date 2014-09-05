@@ -1,5 +1,7 @@
 import sqlite3
-from config import DATABASE_PATH
+
+from app.config import DATABASE_PATH
+
 
 with sqlite3.connect(DATABASE_PATH) as connection:
     c = connection.cursor()
