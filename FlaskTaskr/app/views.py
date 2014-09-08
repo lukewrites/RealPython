@@ -34,7 +34,7 @@ def logout():
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME'] or \
+        if request.form['username'] != app.config['USERNAME'] or\
                         request.form['password'] != app.config['PASSWORD']:
             error = 'Invalid credentials. Please try again'
         else:
@@ -91,7 +91,7 @@ def delete_entry(task_id):
     return redirect(url_for('tasks'))
 
 
-@app.route('/register/')
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
     error = None
     form = RegisterForm(request.form, csrf_enabled=False)
