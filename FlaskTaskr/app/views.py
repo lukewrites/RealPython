@@ -1,14 +1,15 @@
 from flask import Flask, flash, redirect, render_template, request, \
     session, url_for, g
 from functools import wraps
-import sqlite3
+from flask.ext.sqlalchemy import SQLAlchemy
+
 
 app = Flask(__name__)
 app.config.from_object('config')
+db = SQLAlchemy(app)
 
 
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
+from models import FTasks
 
 def login_requred(test):
     @wraps(test)
