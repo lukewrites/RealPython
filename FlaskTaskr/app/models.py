@@ -9,6 +9,7 @@ class FTasks(db.Model):
     due_date = db.Column(db.Date, nullable=False)
     priority = db.Column(db.Integer, nullable=False)
     status = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __init__(self, name, due_date, priority, status):
         self.name = name
