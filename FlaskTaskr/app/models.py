@@ -18,3 +18,8 @@ class FTasks(db.Model):
 
     def __repr__(self):
         return '<name %r>' % self.body
+
+
+class User(db.Model):
+
+    __tablename__ = 'users'

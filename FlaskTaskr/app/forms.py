@@ -3,7 +3,7 @@ from wtforms import TextField, DateField, IntegerField, SelectField
 from wtforms.validators import DataRequired
 
 
-class AddTaskForm(Form):
+class AddTask(Form):
     task_id = IntegerField('Priority')
     name = TextField('Task Name', validators=[DataRequired()])
     due_date = DateField(
