@@ -26,6 +26,7 @@ def login_requred(test):
 @app.route('/logout/')
 def logout():
     session.pop('logged_in', None)
+    session.pop('user_id', None)
     flash('You are logged out. Buh-bye!')
     return redirect(url_for('login'))
 
@@ -46,18 +47,26 @@ def login():
             error = 'Invalid username or password.'
         else:
             session['logged_in'] = True
+            session['user_id'] = u.id
             flash('You are logged in. Have fun!')
             return redirect(url_for('tasks'))
-    return render_template('login.html', \
+    return render_template('login.html',
         form=LoginForm(request.form), error=error)
 
 
 @app.route('/tasks/')
 @login_requred
 def tasks():
-    open_tasks = db.session.query(FTasks).filter_by(status='1').order_by(FTasks.due_date.asc())
-    closed_tasks = db.session.query(FTasks).filter_by(status='0').order_by(FTasks.due_date.asc())
-    return render_template('tasks.html', form=AddTask(request.form), open_tasks=open_tasks, closed_tasks=closed_tasks)
+    open_tasks = db.session.query(FTasks) \
+        .filter_by(status='1').order_by(FTasks.due_date.asc())
+    closed_tasks = db.session.query(FTasks) \
+        .filter_by(status='0').order_by(FTasks.due_date.asc())
+    return render_template(
+        'tasks.html',
+        form=AddTask(request.form),
+        open_tasks=open_tasks,
+        closed_tasks=closed_tasks
+    )
 
 
 # add new tasks
@@ -72,11 +81,13 @@ def new_task():
             form.priority.data,
             form.posted_date.data,
             '1',
-            '1'  # assigns user_id to '1'
+            session['user_id']
         )
         db.session.add(new_task)
         db.session.commit()
         flash('New entry was successfully posted. Rock on.')
+    else:
+        flash_errors(form)
     return redirect(url_for('tasks'))
 
 
@@ -115,4 +126,12 @@ def register():
         db.session.commit()
         flash('Thanks for registering. Please login')
         return redirect(url_for('login'))
+    else:
+        flash_errors(form)
     return render_template('register.html', form=form, error=error)
+
+def flash_errors(form):
+    for field, errors in form.errors.items():
+        for error in errors:
+            flash(u"Error in the %s field - %s" %
+                  (getattr(form, field).label.text, error,), 'error')
