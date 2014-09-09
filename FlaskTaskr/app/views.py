@@ -34,7 +34,10 @@ def logout():
 def login():
     error = None
     if request.method == 'POST':
-        u = User.query.filter_by(name=request.form['name'], password=request.form['password']).first()
+        u = User.query.filter_by(
+            name=request.form['name'],
+            password=request.form['password']
+            ).first()
         #  .filter_by searches for keyword expressions (name='', password='')
         #  the use of .first() returns the first result or None.
         #  so, in the above we are filtering by 'name' and 'password'; if they don't exist together,
@@ -52,9 +55,7 @@ def login():
 @app.route('/tasks/')
 @login_requred
 def tasks():
-    open_tasks = \
-        db.session.query(FTasks).filter_by(status='1').\
-        order_by(FTasks.due_date.asc())
+    open_tasks = db.session.query(FTasks).filter_by(status='1').order_by(FTasks.due_date.asc())
     closed_tasks = db.session.query(FTasks).filter_by(status='0').order_by(FTasks.due_date.asc())
     return render_template('tasks.html', form=AddTask(request.form), open_tasks=open_tasks, closed_tasks=closed_tasks)
 
