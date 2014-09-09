@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, \
 from functools import wraps
 from flask.ext.sqlalchemy import SQLAlchemy
 from forms import AddTask, RegisterForm, LoginForm
+from sqlalchemy.exc import IntegrityError
 
 
 app = Flask(__name__)
@@ -122,16 +123,31 @@ def register():
             form.email.data,
             form.password.data,
         )
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Thanks for registering. Please login')
-        return redirect(url_for('login'))
+        try:  # we use a try because we know that there's is the chance of an IntegrityError.
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Thanks for registering. Please login')
+            return redirect(url_for('login'))
+        except IntegrityError:  # so we are looking out for this specific error.
+            error = "Oh snap! That username and/or email already exists. Please try again."
+            return render_template("register.html", form=form, error=error)
     else:
         flash_errors(form)
-    return render_template('register.html', form=form, error=error)
+        return render_template('register.html', form=form, error=error)
 
 def flash_errors(form):
     for field, errors in form.errors.items():
         for error in errors:
             flash(u"Error in the %s field - %s" %
                   (getattr(form, field).label.text, error,), 'error')
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
+
+
+@app.errorhandler(404)
+def internal_error(error):
+    return render_template('404.html'), 404
