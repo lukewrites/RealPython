@@ -63,7 +63,7 @@ def tasks():
 @app.route('/add/', methods=['GET', 'POST'])
 @login_requred
 def new_task():
-    form = AddTask(request.form, csrf_enables=False)
+    form = AddTask(request.form, csrf_enabled=False)
     if form.validate_on_submit():
         new_task = FTasks(
             form.name.data,
@@ -83,8 +83,8 @@ def new_task():
 @app.route('/complete/<int:task_id>/')
 @login_requred
 def complete(task_id):
-    new_task = task_id
-    db.session.query(FTasks).filter_by(task_id=new_id).update({"status":"0"})
+    new_id = task_id
+    db.session.query(FTasks).filter_by(task_id=new_id).update({"status": '0'})
     db.session.commit()
     flash('The task was marked as complete.')
     return redirect(url_for('tasks'))
