@@ -35,22 +35,28 @@ def login():
     error = None
     if request.method == 'POST':
         u = User.query.filter_by(name=request.form['name'], password=request.form['password']).first()
+        #  .filter_by searches for keyword expressions (name='', password='')
+        #  the use of .first() returns the first result or None.
+        #  so, in the above we are filtering by 'name' and 'password'; if they don't exist together,
+        #  None is returned.
         if u is None:
             error = 'Invalid username or password.'
         else:
             session['logged_in'] = True
             flash('You are logged in. Have fun!')
             return redirect(url_for('tasks'))
-    return render_template('login.html', form=LoginForm(request.form), error=error)
+    return render_template('login.html', \
+        form=LoginForm(request.form), error=error)
 
 
 @app.route('/tasks/')
 @login_requred
 def tasks():
-    open_tasks = db.session.query(FTasks).filter_by(status='1').order_by(FTasks.due_date.asc())
+    open_tasks = \
+        db.session.query(FTasks).filter_by(status='1').\
+        order_by(FTasks.due_date.asc())
     closed_tasks = db.session.query(FTasks).filter_by(status='0').order_by(FTasks.due_date.asc())
-    return render_template('tasks.html', form=AddTask(request.form), open_tasks=open_tasks,
-                           closed_tasks=closed_tasks)
+    return render_template('tasks.html', form=AddTask(request.form), open_tasks=open_tasks, closed_tasks=closed_tasks)
 
 
 # add new tasks

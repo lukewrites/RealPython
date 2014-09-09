@@ -31,3 +31,4 @@ class AddTask(Form):
         ]
     )
     status = IntegerField('Status')
+    posted_date = DateField('Posted Date (mm/dd/yyyy', validators=[DataRequired()], format='%m/%d/%Y')
