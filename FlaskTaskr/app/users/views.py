@@ -6,11 +6,14 @@ from app.models import User
 from sqlalchemy.exc import IntegrityError
 
 
+# this defines our users Blueprint along with custom temp & static folders.
+# it also tells us the url at which users is accessible.
 mod = Blueprint('users', __name__, url_prefix='/users',
                 template_folder='templates',
                 static_folder='static'
                 )
 
+# now @mod will be used instead of @app, like we originally used. Wow!
 @mod.route('/logout/')
 def logout():
     session.pop('logged_in', None)
@@ -30,7 +33,7 @@ def login():
             session['logged_in'] = True
             session['user_id'] = u.id
             flash('You are logged in. Go nuts.')
-            return redirect(url_for('tasks.tasks'))
+            return redirect(url_for('tasks.tasks'))  # that is, the tasks view of the tasks Blueprint.
     return render_template("users/login.html", form=LoginForm(request.form), error=error)
 
 
@@ -48,7 +51,7 @@ def register():
         db.session.add(new_user)
         db.session.commit()
         flash('Thanks for registering. Please login.')
-        return redirect(url_for('.login'))
+        return redirect(url_for('.login'))  ## url for login view of the _current_ Blueprint.
     except IntegrityError:
         error = "Oh snap! That username and/or email already exists. Try again."
     else:
