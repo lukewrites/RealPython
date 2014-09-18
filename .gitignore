@@ -60,3 +60,5 @@ docs/_build/
 *.db
 
 *.swp
+
+web2py/start/
