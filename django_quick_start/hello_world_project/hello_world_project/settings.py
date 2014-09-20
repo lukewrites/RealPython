@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'hello_world',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -81,3 +82,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+SETTINGS_DIR = os.path.dirname(__file__)
+PROJECT_PATH = os.path.join(SETTINGS_DIR)
+PROJECT_ROOT = os.path.abspath(PROJECT_PATH)
+
+print('Project root:', PROJECT_ROOT)
+print('Project path:', PROJECT_PATH)
+
+TEMPLATE_DIRS = (
+    os.path.join(PROJECT_ROOT, 'templates'),
+)
